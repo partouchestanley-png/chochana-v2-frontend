@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --gold: #C5A35A;
+  --cream: #FAF8F3;
+  --ink: #1F1A14;
+  --sub: #6B655C;
+  --green: #2F7A4F;
+  --border: #E5DFD2;
+}
+
+body {
+  background-color: var(--cream);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "SF Pro", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Markdown content */
+.prose-chat h1, .prose-chat h2, .prose-chat h3 {
+  font-weight: 600;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+.prose-chat h1 { font-size: 1.4em; }
+.prose-chat h2 { font-size: 1.2em; color: var(--gold); }
+.prose-chat h3 { font-size: 1.1em; }
+.prose-chat ul, .prose-chat ol { margin: 0.5em 0; padding-left: 1.5em; }
+.prose-chat li { margin: 0.25em 0; }
+.prose-chat p { margin: 0.5em 0; line-height: 1.6; }
+.prose-chat code {
+  background: rgba(0,0,0,0.05);
+  padding: 0.1em 0.3em;
+  border-radius: 0.2em;
+  font-size: 0.9em;
+}
+.prose-chat pre {
+  background: rgba(0,0,0,0.05);
+  padding: 0.8em;
+  border-radius: 0.4em;
+  overflow-x: auto;
+}
