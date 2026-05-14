@@ -337,10 +337,11 @@ export interface SendMessageInput {
 export async function sendChatMessage(
   input: SendMessageInput
 ): Promise<ChatMessageResponse> {
-  // Redirige vers v2
+  // Redirige vers v2 EN PRESERVANT le sessionId (mémoire conversationnelle)
   const v2 = await sendChatMessageV2({
     message: input.message,
     attachments: input.attachments,
+    conversationId: input.sessionId,
   });
   if (!v2.ok || !v2.data) {
     return {
