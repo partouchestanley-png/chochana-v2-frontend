@@ -346,7 +346,12 @@ export default function ChatPage() {
         const response = await sendChatMessageV2({
           message: messageText,
           bypassCache: false,
+          conversationId: sessionId,
         });
+
+        if (response.ok && response.data?.conversationId && !sessionId) {
+          setSessionId(response.data.conversationId);
+        }
 
         if (!response.ok || !response.data) {
           setError(response.error?.message || "Erreur inconnue");
