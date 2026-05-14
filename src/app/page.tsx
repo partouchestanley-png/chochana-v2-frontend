@@ -548,10 +548,10 @@ export default function ChatPage() {
             </p>
             <div className="max-w-md mx-auto grid grid-cols-2 gap-2">
               {[
+                "Reconstruis la chronologie de mon dossier",
                 "Prépare une mise en demeure",
-                "Lis ce contrat (joindre photo)",
-                "Caserne pompiers du 20e à Paris",
-                "Traduis ce courrier en arabe",
+                "Analyse mon contrat (joindre photo)",
+                "Conteste un licenciement ou une rupture",
               ].map((suggestion) => (
                 <button
                   key={suggestion}
