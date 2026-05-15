@@ -271,6 +271,26 @@ export function summarizeTrace(
     }
   }
   summary.totalLatencyMs = data.trace?.totalLatencyMs ?? 0;
+
+  // PATCH 15 mai 2026 : on remplit sourcesCount/connectorsUsed depuis citations[]
+  // pour que l'affichage "Mode juridique · N sources interrogées" soit JUSTE.
+  // Auparavant ces compteurs restaient à 0 = bug catastrophique vu dans le PDF.
+  const citations = (data as { citations?: Array<{ url?: string; title?: string }> }).citations || [];
+  if (citations.length > 0) {
+    summary.sourcesCount = citations.length;
+    const domains = new Set<string>();
+    for (const c of citations) {
+      if (!c?.url) continue;
+      try {
+        const d = new URL(c.url).hostname.replace(/^www\./, "");
+        domains.add(d);
+      } catch {
+        /* url invalide ignorée */
+      }
+    }
+    summary.connectorsUsed = Array.from(domains);
+  }
+
   return summary;
 }
 

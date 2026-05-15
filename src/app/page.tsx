@@ -550,11 +550,12 @@ export default function ChatPage() {
               ❀
             </div>
             <h2 className="text-2xl font-semibold mb-2" style={{ color: "#1F1A14" }}>
-              Bonjour, je suis Chochana.
+              Moshé, je suis là.
             </h2>
             <p className="text-sm mb-8 max-w-md mx-auto" style={{ color: "#6B655C" }}>
-              Posez-moi n&apos;importe quelle question : juridique, recherche, analyse
-              de documents, vie pratique. Je vous accompagne.
+              Parle-moi comme tu parlerais à toi-même. Je t&apos;écoute, je cherche,
+              je vérifie, je n&apos;invente rien. Aucune question n&apos;est trop petite
+              ni trop grande.
             </p>
             <div className="max-w-md mx-auto grid grid-cols-2 gap-2">
               {[
@@ -988,7 +989,7 @@ export default function ChatPage() {
         >
           <p className="text-[10px] tracking-wide">
             PRIMUM FACTI · Chochana — précision, vérité, dignité ·{" "}
-            <span style={{ color: "#C5A35A" }}>שושנה ז”ל</span>
+            <span dir="rtl" lang="he" style={{ color: "#C5A35A", unicodeBidi: "isolate" }}>שושנה ז״ל</span>
             <span className="opacity-40 ml-2">v2.dual.06may26</span>
           </p>
         </div>
