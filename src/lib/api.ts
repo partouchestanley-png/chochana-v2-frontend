@@ -29,6 +29,12 @@ export interface V2Trace {
   totalLatencyMs?: number;
 }
 
+export interface Citation {
+  url: string;
+  title: string;
+  snippet?: string;
+}
+
 export interface ChatV2Response {
   ok: boolean;
   data?: {
@@ -36,6 +42,7 @@ export interface ChatV2Response {
     trace: V2Trace;
     cached: boolean;
     conversationId?: string;
+    citations?: Citation[];
   };
   error?: { code: string; message: string };
 }
@@ -198,6 +205,17 @@ export async function sendChatMessageV2(
       });
     }
 
+    // Extraire les citations (sources web) renvoyées par le backend v2
+    const citations: Citation[] = Array.isArray(json.citations)
+      ? json.citations
+          .filter((c: any) => c && typeof c.url === "string" && c.url.length > 0)
+          .map((c: any) => ({
+            url: c.url,
+            title: c.title || c.url,
+            snippet: c.snippet || "",
+          }))
+      : [];
+
     return {
       ok: true,
       data: {
@@ -205,6 +223,7 @@ export async function sendChatMessageV2(
         trace: { steps, totalLatencyMs },
         cached,
         conversationId,
+        citations,
       },
     };
   } catch (err: any) {
@@ -561,7 +580,11 @@ export async function sendChatMessage(
       model: "chochana-v2",
       latencyMs: v2.data.trace?.totalLatencyMs || 0,
       tokensUsed: { input: 0, output: 0 },
-      citations: [],
+      citations: (v2.data.citations || []).map((c) => ({
+        url: c.url,
+        title: c.title,
+        snippet: c.snippet || "",
+      })),
       error: null,
     },
   };

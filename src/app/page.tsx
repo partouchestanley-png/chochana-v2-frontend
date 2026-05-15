@@ -361,7 +361,17 @@ export default function ChatPage() {
 
         const responseText = cleanResponseText(response.data.response);
         const trace = summarizeTrace(response.data);
-        const citations = extractCitations(responseText);
+        // PRIORITÉ : citations renvoyées par le backend v2 (recherche web).
+        // FALLBACK : extraction depuis le texte (anciens formats).
+        const backendCitations = response.data.citations || [];
+        const citations =
+          backendCitations.length > 0
+            ? backendCitations.map((c) => ({
+                url: c.url,
+                title: c.title,
+                snippet: c.snippet || "",
+              }))
+            : extractCitations(responseText);
 
         const assistantMsg: Message = {
           id: `assistant-${Date.now()}`,
@@ -626,22 +636,94 @@ export default function ChatPage() {
                 <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
               )}
               {msg.citations && msg.citations.length > 0 && (
-                <div className="mt-3 pt-2 border-t text-xs" style={{ borderColor: "#E5DFD2", color: "#6B655C" }}>
-                  <p className="font-semibold mb-1">Sources :</p>
-                  <ul className="space-y-0.5">
-                    {msg.citations.map((c, i) => (
-                      <li key={i}>
-                        <a
-                          href={c.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{ color: "#2F7A4F", textDecoration: "underline" }}
+                <div
+                  className="mt-3 pt-3 border-t text-xs"
+                  style={{ borderColor: "#E5DFD2", color: "#6B655C" }}
+                >
+                  <p
+                    className="font-semibold mb-2 flex items-center gap-1.5"
+                    style={{ color: "#4A463E" }}
+                  >
+                    <span
+                      style={{
+                        display: "inline-block",
+                        width: 6,
+                        height: 6,
+                        borderRadius: 9999,
+                        background: "#2F7A4F",
+                      }}
+                    />
+                    Sources vérifiées ({msg.citations.length})
+                  </p>
+                  <ol className="space-y-1.5" style={{ paddingLeft: 0, listStyle: "none" }}>
+                    {msg.citations.map((c, i) => {
+                      let domain = "";
+                      try {
+                        domain = new URL(c.url).hostname.replace(/^www\./, "");
+                      } catch {
+                        domain = c.url.slice(0, 40);
+                      }
+                      return (
+                        <li
+                          key={i}
+                          className="flex items-start gap-2"
+                          style={{ lineHeight: 1.4 }}
                         >
-                          {c.title || c.url}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
+                          <span
+                            style={{
+                              display: "inline-flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              minWidth: 20,
+                              height: 20,
+                              borderRadius: 6,
+                              background: "#F0EBDC",
+                              color: "#4A463E",
+                              fontSize: 11,
+                              fontWeight: 600,
+                              flexShrink: 0,
+                              marginTop: 1,
+                            }}
+                          >
+                            {i + 1}
+                          </span>
+                          <div style={{ minWidth: 0, flex: 1 }}>
+                            <a
+                              href={c.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                color: "#2F7A4F",
+                                textDecoration: "none",
+                                fontWeight: 500,
+                                display: "block",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                whiteSpace: "nowrap",
+                              }}
+                              title={c.title || c.url}
+                              onMouseEnter={(e) => (e.currentTarget.style.textDecoration = "underline")}
+                              onMouseLeave={(e) => (e.currentTarget.style.textDecoration = "none")}
+                            >
+                              {c.title || c.url}
+                            </a>
+                            <span
+                              style={{
+                                fontSize: 10,
+                                color: "#9A9489",
+                                display: "block",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                whiteSpace: "nowrap",
+                              }}
+                            >
+                              {domain}
+                            </span>
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ol>
                 </div>
               )}
               {msg.role === "assistant" && msg.mode === "legal" && msg.trace && (
