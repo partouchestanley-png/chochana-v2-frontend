@@ -550,7 +550,7 @@ export default function ChatPage() {
               ❀
             </div>
             <h2 className="text-2xl font-semibold mb-2" style={{ color: "#1F1A14" }}>
-              Moshé, je suis là.
+              Bonjour, je suis Chochana.
             </h2>
             <p className="text-sm mb-8 max-w-md mx-auto" style={{ color: "#6B655C" }}>
               Parle-moi comme tu parlerais à toi-même. Je t&apos;écoute, je cherche,
