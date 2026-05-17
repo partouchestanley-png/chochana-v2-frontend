@@ -433,23 +433,10 @@ export default function ChatPage() {
       return;
     }
 
-    // Types acceptés
-    const ACCEPTED = [
-      "image/jpeg",
-      "image/png",
-      "image/webp",
-      "image/gif",
-      "application/pdf",
-    ];
+    // Tous formats acceptés (validation taille uniquement)
     const MAX_SIZE = 25 * 1024 * 1024; // 25 MB par fichier
 
     for (const file of filesArr) {
-      if (!ACCEPTED.includes(file.type)) {
-        setError(
-          `Type non supporté : ${file.name} (${file.type}). Formats acceptés : JPG, PNG, WEBP, GIF, PDF.`
-        );
-        return;
-      }
       if (file.size > MAX_SIZE) {
         const mb = Math.round(file.size / (1024 * 1024));
         setError(
@@ -842,7 +829,7 @@ export default function ChatPage() {
             <input
               ref={fileInputRef}
               type="file"
-              accept="image/jpeg,image/png,image/webp,image/gif,application/pdf"
+              accept="*/*"
               multiple
               className="hidden"
               onChange={(e) => {
